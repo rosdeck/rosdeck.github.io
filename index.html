@@ -694,10 +694,6 @@
         <!-- Replace action URL with your Mailchimp list signup endpoint -->
         <form class="beta-form email-capture">
           <p class="email-capture-label">Android — closed beta</p>
-          <label class="email-checkbox-row">
-            <input type="checkbox" class="beta-android-check" />
-            <span>I have an Android device</span>
-          </label>
           <div class="email-row">
             <input
               type="email"
@@ -706,7 +702,7 @@
               placeholder="your@email.com"
               required
             />
-            <button type="submit" class="email-submit" disabled>
+            <button type="submit" class="email-submit">
               Join closed beta
             </button>
           </div>
@@ -943,10 +939,6 @@
         <h2>Try it on your robot.</h2>
         <p>Android — closed beta</p>
         <form class="beta-form email-capture">
-          <label class="email-checkbox-row">
-            <input type="checkbox" class="beta-android-check" />
-            <span>I have an Android device</span>
-          </label>
           <div class="email-row">
             <input
               type="email"
@@ -955,7 +947,7 @@
               placeholder="your@email.com"
               required
             />
-            <button type="submit" class="email-submit" disabled>
+            <button type="submit" class="email-submit">
               Join closed beta
             </button>
           </div>
@@ -1033,11 +1025,6 @@
         var input = form.querySelector(".email-input");
         var btn = form.querySelector(".email-submit");
         var feedback = form.querySelector(".email-feedback");
-        var androidCheck = form.querySelector(".beta-android-check");
-
-        androidCheck.addEventListener("change", function () {
-          btn.disabled = !androidCheck.checked;
-        });
 
         form.addEventListener("submit", function (e) {
           e.preventDefault();
