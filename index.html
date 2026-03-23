@@ -1,0 +1,977 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ROSDeck — A teleop cyberdeck for ROS 2</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      body {
+        background: #0d0d0d;
+        color: #e0e0e0;
+        font-family: "Space Mono", monospace;
+        -webkit-font-smoothing: antialiased;
+      }
+      h1,
+      h2,
+      h3,
+      h4,
+      .wordmark,
+      .section-title,
+      .widget-name,
+      .privacy-title,
+      .footer-wordmark {
+        font-family: "Inter", sans-serif;
+      }
+      nav {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 24px 48px;
+        border-bottom: 1px solid #161616;
+      }
+      .wordmark {
+        font-size: 14px;
+        font-weight: 700;
+        letter-spacing: 3px;
+        text-transform: uppercase;
+        color: #f0f0f0;
+      }
+      .wordmark span {
+        color: #34d399;
+      }
+      nav a {
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        color: #666;
+        text-decoration: none;
+      }
+      nav a:hover {
+        color: #888;
+      }
+      .hero {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        padding: 88px 24px 64px;
+        gap: 20px;
+      }
+      .badge {
+        font-size: 10px;
+        font-weight: 600;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: #34d399;
+        border: 1px solid rgba(52, 211, 153, 0.25);
+        border-radius: 4px;
+        padding: 4px 12px;
+      }
+      .hero h1 {
+        font-size: clamp(52px, 9vw, 88px);
+        font-weight: 800;
+        letter-spacing: -2px;
+        color: #f0f0f0;
+        line-height: 1;
+      }
+      .hero-tagline {
+        font-size: clamp(16px, 2.5vw, 22px);
+        color: #999;
+      }
+      .hero-desc {
+        font-size: 15px;
+        color: #888;
+        max-width: 420px;
+        line-height: 1.8;
+      }
+      .email-capture {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 10px;
+        margin-top: 8px;
+        width: 100%;
+        max-width: 420px;
+      }
+      .email-capture-label {
+        font-size: 11px;
+        font-weight: 600;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        color: #666;
+      }
+      .email-row {
+        display: flex;
+        gap: 8px;
+        width: 100%;
+      }
+      .email-input {
+        flex: 1;
+        background: #111;
+        border: 1px solid #2a2a2a;
+        border-radius: 8px;
+        padding: 13px 16px;
+        font-size: 14px;
+        color: #f0f0f0;
+        font-family: inherit;
+        outline: none;
+        transition: border-color 0.15s;
+      }
+      .email-input::placeholder {
+        color: #444;
+      }
+      .email-input:focus {
+        border-color: #34d399;
+      }
+      .email-submit {
+        background: #34d399;
+        color: #0d0d0d;
+        border: none;
+        border-radius: 8px;
+        padding: 13px 22px;
+        font-size: 14px;
+        font-weight: 700;
+        cursor: pointer;
+        font-family: inherit;
+        white-space: nowrap;
+        transition: opacity 0.15s;
+      }
+      .email-submit:hover {
+        opacity: 0.85;
+      }
+      .email-submit:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+      .email-feedback {
+        font-size: 12px;
+        text-align: center;
+        min-height: 16px;
+      }
+      .email-feedback.success {
+        color: #34d399;
+      }
+      .email-feedback.error {
+        color: #f87171;
+      }
+      .email-checkbox-row {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        width: 100%;
+        cursor: pointer;
+      }
+      .email-checkbox-row input[type="checkbox"] {
+        appearance: none;
+        -webkit-appearance: none;
+        width: 16px;
+        height: 16px;
+        min-width: 16px;
+        border: 1px solid #2a2a2a;
+        border-radius: 4px;
+        background: #111;
+        cursor: pointer;
+        transition:
+          border-color 0.15s,
+          background 0.15s;
+      }
+      .email-checkbox-row input[type="checkbox"]:checked {
+        background: #34d399;
+        border-color: #34d399;
+        background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 10 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 4l3 3 5-6' stroke='%230d0d0d' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: center;
+        background-size: 10px 8px;
+      }
+      .email-checkbox-row span {
+        font-size: 13px;
+        color: #888;
+        user-select: none;
+      }
+      hr.divider {
+        border: none;
+        border-top: 1px solid #161616;
+      }
+
+      /* Shared section styles */
+      .section-wrap {
+        max-width: 960px;
+        margin: 0 auto;
+        padding: 96px 48px;
+      }
+      .section-label {
+        font-size: 10px;
+        font-weight: 600;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: #34d399;
+        margin-bottom: 16px;
+      }
+      .section-title {
+        font-size: clamp(28px, 4vw, 40px);
+        font-weight: 700;
+        color: #f0f0f0;
+        line-height: 1.2;
+        margin-bottom: 16px;
+        letter-spacing: -0.5px;
+      }
+      .section-body {
+        font-size: 15px;
+        color: #888;
+        line-height: 1.8;
+        max-width: 520px;
+      }
+
+      /* Layout section */
+      .layout-cols {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 64px;
+        align-items: center;
+      }
+      .layout-features {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+        margin-top: 32px;
+      }
+      .layout-feature {
+        display: flex;
+        gap: 14px;
+        align-items: flex-start;
+      }
+      .feature-dot {
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: #34d399;
+        box-shadow: 0 0 6px rgba(52, 211, 153, 0.4);
+        margin-top: 6px;
+        flex-shrink: 0;
+      }
+      .feature-text h4 {
+        font-size: 13px;
+        font-weight: 600;
+        color: #c0c0c0;
+        margin-bottom: 3px;
+      }
+      .feature-text p {
+        font-size: 13px;
+        color: #888;
+        line-height: 1.6;
+      }
+
+      /* Layout carousel */
+      .carousel-wrap {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 20px;
+      }
+      .carousel-phone {
+        width: 100%;
+        max-width: 320px;
+      }
+      .carousel-phone .phone-frame {
+        width: 100%;
+      }
+      .carousel-controls {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+      }
+      .carousel-btn {
+        background: transparent;
+        border: 1px solid #2a2a2a;
+        color: #555;
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        cursor: pointer;
+        font-size: 16px;
+        line-height: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition:
+          border-color 0.15s,
+          color 0.15s;
+      }
+      .carousel-btn:hover {
+        border-color: #34d399;
+        color: #34d399;
+      }
+      .carousel-dots {
+        display: flex;
+        gap: 6px;
+        align-items: center;
+      }
+      .carousel-dot {
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: #2a2a2a;
+        border: none;
+        cursor: pointer;
+        padding: 0;
+        transition:
+          background 0.2s,
+          transform 0.2s;
+      }
+      .carousel-dot.active {
+        background: #34d399;
+        transform: scale(1.3);
+      }
+
+      /* Widgets */
+      .widgets-grid {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        border: 1px solid #1e1e1e;
+        border-radius: 12px;
+        overflow: hidden;
+        margin-top: 40px;
+      }
+      .widget-cell {
+        background: #111;
+        padding: 24px 20px;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        border-right: 1px solid #1e1e1e;
+        border-bottom: 1px solid #1e1e1e;
+      }
+      .widget-cell:nth-child(3n) {
+        border-right: none;
+      }
+      .widget-cell:nth-child(n + 4) {
+        border-bottom: none;
+      }
+      .widget-icon {
+        font-size: 20px;
+        margin-bottom: 4px;
+      }
+      .widget-name {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        color: #c0c0c0;
+      }
+      .widget-desc {
+        font-size: 12px;
+        color: #888;
+        line-height: 1.5;
+      }
+
+      /* Connect section */
+      .connect-cols {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 64px;
+        align-items: start;
+      }
+      .protocol-cards {
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+        margin-top: 32px;
+      }
+      .protocol-card {
+        background: #111;
+        border: 1px solid #1e1e1e;
+        border-radius: 8px;
+        padding: 16px 20px;
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+      .protocol-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        flex-shrink: 0;
+      }
+      .protocol-dot.green {
+        background: #34d399;
+        box-shadow: 0 0 6px rgba(52, 211, 153, 0.5);
+      }
+      .protocol-dot.blue {
+        background: #4a9eff;
+        box-shadow: 0 0 6px rgba(74, 158, 255, 0.5);
+      }
+      .protocol-info h4 {
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: 1px;
+        text-transform: uppercase;
+        color: #c0c0c0;
+        margin-bottom: 2px;
+      }
+      .protocol-info p {
+        font-size: 12px;
+        color: #888;
+      }
+
+      /* Privacy box */
+      .privacy-box {
+        background: #111;
+        border: 1px solid #1e1e1e;
+        border-radius: 10px;
+        padding: 28px 24px;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+      .privacy-label {
+        font-size: 9px;
+        font-weight: 700;
+        letter-spacing: 2px;
+        text-transform: uppercase;
+        color: #34d399;
+      }
+      .privacy-title {
+        font-size: 18px;
+        font-weight: 700;
+        color: #f0f0f0;
+        line-height: 1.3;
+      }
+      .privacy-desc {
+        font-size: 13px;
+        color: #888;
+        line-height: 1.7;
+      }
+      .privacy-points {
+        list-style: none;
+        display: flex;
+        flex-direction: column;
+        gap: 8px;
+      }
+      .privacy-points li {
+        font-size: 12px;
+        color: #888;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+      }
+      .privacy-points li::before {
+        content: "";
+        width: 5px;
+        height: 5px;
+        border-radius: 50%;
+        background: rgba(52, 211, 153, 0.35);
+        flex-shrink: 0;
+      }
+
+      /* Closing CTA */
+      .cta-section {
+        padding: 96px 48px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 8px;
+      }
+      .cta-section h2 {
+        font-size: clamp(28px, 4vw, 42px);
+        font-weight: 800;
+        letter-spacing: -0.5px;
+        color: #f0f0f0;
+        margin-bottom: 4px;
+      }
+      .cta-section p {
+        font-size: 14px;
+        color: #666;
+        margin-bottom: 8px;
+      }
+
+      /* Footer */
+      footer {
+        border-top: 1px solid #161616;
+        padding: 28px 48px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      .footer-left {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+      }
+      .footer-wordmark {
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 2.5px;
+        text-transform: uppercase;
+        color: #666;
+      }
+      .footer-copy {
+        font-size: 11px;
+        color: #666;
+      }
+      footer a {
+        font-size: 11px;
+        color: #666;
+        text-decoration: none;
+      }
+      footer a:hover {
+        color: #999;
+      }
+
+      /* Screenshots */
+      .screenshots {
+        padding: 48px 48px 96px;
+        display: flex;
+        justify-content: center;
+      }
+      .phones-row {
+        display: flex;
+        align-items: flex-end;
+        gap: 20px;
+      }
+      .phone-wrap.side {
+        transform: translateY(0px);
+      }
+      .phone-frame {
+        border-radius: 28px;
+        border: 1.5px solid #2a2a2a;
+        overflow: hidden;
+        box-shadow:
+          0 32px 64px rgba(0, 0, 0, 0.7),
+          0 0 0 1px #1a1a1a;
+        background: #111;
+      }
+      .phone-wrap.main .phone-frame {
+        width: 320px;
+      }
+      .phone-wrap.side .phone-frame {
+        width: 280px;
+      }
+      .phone-screen {
+        display: block;
+        width: 100%;
+        aspect-ratio: 9 / 19.5;
+        object-fit: cover;
+        background: #1a1a1a; /* shown if image missing */
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <div class="wordmark">ROS<span>Deck</span></div>
+      <a href="./privacy-policy.html">Privacy Policy</a>
+    </nav>
+    <main>
+      <section class="hero">
+        <div class="badge">ROS 2</div>
+        <h1>ROSDeck</h1>
+        <p class="hero-tagline">ROS 2 teleop, done right.</p>
+        <p class="hero-desc">
+          Monitor sensors, stream camera feeds, and drive your robot — all from
+          your phone. No cloud. No account. Just connect.
+        </p>
+        <!-- Replace action URL with your Mailchimp list signup endpoint -->
+        <form class="beta-form email-capture">
+          <p class="email-capture-label">Android — closed beta</p>
+          <label class="email-checkbox-row">
+            <input type="checkbox" class="beta-android-check" />
+            <span>I have an Android device</span>
+          </label>
+          <div class="email-row">
+            <input
+              type="email"
+              name="email"
+              class="email-input"
+              placeholder="your@email.com"
+              required
+            />
+            <button type="submit" class="email-submit" disabled>
+              Join closed beta
+            </button>
+          </div>
+          <p class="email-feedback"></p>
+        </form>
+      </section>
+      <div class="screenshots">
+        <div class="phones-row">
+          <div class="phone-wrap side">
+            <div class="phone-frame">
+              <img
+                class="phone-screen"
+                src="./assets/screenshots/screen-1.png"
+                alt="ROSDeck — Drive + Camera layout"
+              />
+            </div>
+          </div>
+
+          <div class="phone-wrap main">
+            <div class="phone-frame">
+              <img
+                class="phone-screen"
+                src="./assets/screenshots/screen-2.png"
+                alt="ROSDeck — Dashboard layout"
+              />
+            </div>
+          </div>
+
+          <div class="phone-wrap side">
+            <div class="phone-frame">
+              <img
+                class="phone-screen"
+                src="./assets/screenshots/screen-3.png"
+                alt="ROSDeck — Demo mode"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <hr class="divider" />
+
+      <div class="section-wrap">
+        <div class="layout-cols">
+          <div>
+            <div class="section-label">Layouts</div>
+            <h2 class="section-title">Your dashboard,<br />your way</h2>
+            <p class="section-body">
+              Split any pane horizontally or vertically — like tmux for your
+              robot. Each pane holds one widget. Tap a divider to resize or swap
+              sides. Save your arrangement as a named preset and switch between
+              setups instantly.
+            </p>
+            <div class="layout-features">
+              <div class="layout-feature">
+                <div class="feature-dot"></div>
+                <div class="feature-text">
+                  <h4>Split any pane</h4>
+                  <p>
+                    Divide horizontally or vertically. Stack as many widgets as
+                    your screen allows.
+                  </p>
+                </div>
+              </div>
+              <div class="layout-feature">
+                <div class="feature-dot"></div>
+                <div class="feature-text">
+                  <h4>Tap to resize or swap</h4>
+                  <p>
+                    Touch a divider handle to adjust the split ratio or swap the
+                    two sides.
+                  </p>
+                </div>
+              </div>
+              <div class="layout-feature">
+                <div class="feature-dot"></div>
+                <div class="feature-text">
+                  <h4>Named presets</h4>
+                  <p>
+                    Save any layout as a preset. One tap to switch from "Drive"
+                    to "Inspect" mode.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="carousel-wrap">
+            <div class="carousel-phone">
+              <div class="phone-frame">
+                <img
+                  class="phone-screen"
+                  id="carousel-img"
+                  src="./assets/carousel/1.png"
+                  alt="ROSDeck layout example"
+                />
+              </div>
+            </div>
+            <div class="carousel-controls">
+              <button
+                class="carousel-btn"
+                id="carousel-prev"
+                aria-label="Previous screenshot"
+              >
+                &#8592;
+              </button>
+              <div class="carousel-dots" id="carousel-dots"></div>
+              <button
+                class="carousel-btn"
+                id="carousel-next"
+                aria-label="Next screenshot"
+              >
+                &#8594;
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <hr class="divider" />
+
+      <div class="section-wrap">
+        <div class="section-label">Widgets</div>
+        <h2 class="section-title">Everything your robot publishes</h2>
+        <p class="section-body">
+          Each pane holds one widget. Mix and match to build the exact view you
+          need for the task at hand.
+        </p>
+        <div class="widgets-grid">
+          <div class="widget-cell">
+            <div class="widget-icon">📷</div>
+            <div class="widget-name">Camera</div>
+            <div class="widget-desc">
+              Live video from MJPEG streams or compressed image topics. Low
+              latency, full pane.
+            </div>
+          </div>
+          <div class="widget-cell">
+            <div class="widget-icon">🕹</div>
+            <div class="widget-name">Joystick</div>
+            <div class="widget-desc">
+              Publish Twist or TwistStamped to any cmd_vel topic. Configurable
+              max linear and angular speeds.
+            </div>
+          </div>
+          <div class="widget-cell">
+            <div class="widget-icon">🔋</div>
+            <div class="widget-name">Battery</div>
+            <div class="widget-desc">
+              Voltage, current, charge, and capacity from
+              sensor_msgs/BatteryState.
+            </div>
+          </div>
+          <div class="widget-cell">
+            <div class="widget-icon">📈</div>
+            <div class="widget-name">Chart</div>
+            <div class="widget-desc">
+              Time-series plot of any numeric field. Subscribe to multiple
+              series at once.
+            </div>
+          </div>
+          <div class="widget-cell">
+            <div class="widget-icon">🗺</div>
+            <div class="widget-name">Map</div>
+            <div class="widget-desc">
+              Live occupancy grid with robot pose overlay. Pan and zoom.
+            </div>
+          </div>
+          <div class="widget-cell">
+            <div class="widget-icon">⚙️</div>
+            <div class="widget-name">Diagnostics</div>
+            <div class="widget-desc">
+              Status summary from /diagnostics. Green dot when all clear.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <hr class="divider" />
+
+      <div class="section-wrap">
+        <div class="connect-cols">
+          <div>
+            <div class="section-label">Connect</div>
+            <h2 class="section-title">Works with your existing ROS 2 stack</h2>
+            <p class="section-body">
+              No special drivers. No custom nodes. If you're running rosbridge
+              or foxglove-bridge, you're already set up.
+            </p>
+            <div class="protocol-cards">
+              <div class="protocol-card">
+                <div class="protocol-dot green"></div>
+                <div class="protocol-info">
+                  <h4>Rosbridge WebSocket</h4>
+                  <p>
+                    The standard. Works with any ROS 2 setup out of the box.
+                  </p>
+                </div>
+              </div>
+              <div class="protocol-card">
+                <div class="protocol-dot blue"></div>
+                <div class="protocol-info">
+                  <h4>Foxglove WebSocket</h4>
+                  <p>
+                    Higher throughput for bandwidth-heavy setups like compressed
+                    video.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="privacy-box">
+            <div class="privacy-label">Privacy</div>
+            <h3 class="privacy-title">
+              Everything stays on your local network
+            </h3>
+            <p class="privacy-desc">
+              ROSDeck communicates only with addresses you provide, over your
+              local Wi-Fi. Nothing leaves your network.
+            </p>
+            <ul class="privacy-points">
+              <li>No account required</li>
+              <li>No cloud servers</li>
+              <li>No analytics or tracking</li>
+              <li>No data ever leaves your device</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <hr class="divider" />
+
+      <div class="cta-section">
+        <h2>Try it on your robot.</h2>
+        <p>Android — closed beta</p>
+        <form class="beta-form email-capture">
+          <label class="email-checkbox-row">
+            <input type="checkbox" class="beta-android-check" />
+            <span>I have an Android device</span>
+          </label>
+          <div class="email-row">
+            <input
+              type="email"
+              name="email"
+              class="email-input"
+              placeholder="your@email.com"
+              required
+            />
+            <button type="submit" class="email-submit" disabled>
+              Join closed beta
+            </button>
+          </div>
+          <p class="email-feedback"></p>
+        </form>
+      </div>
+    </main>
+    <footer>
+      <div class="footer-left">
+        <span class="footer-wordmark">ROSDeck</span>
+        <span class="footer-copy">© 2026 Baunuri</span>
+      </div>
+      <a href="./privacy-policy.html">Privacy Policy</a>
+    </footer>
+    <script>
+      (function () {
+        // ── Add your carousel images here ──────────────────────────────────────
+        var images = [
+          "./assets/carousel/1.png",
+          "./assets/carousel/2.png",
+          "./assets/carousel/3.png",
+          "./assets/carousel/4.png",
+          "./assets/carousel/5.png",
+          "./assets/carousel/6.png",
+          "./assets/carousel/7.png",
+        ];
+        // ───────────────────────────────────────────────────────────────────────
+
+        var img = document.getElementById("carousel-img");
+        var dots = document.getElementById("carousel-dots");
+        var prev = document.getElementById("carousel-prev");
+        var next = document.getElementById("carousel-next");
+        var current = 0;
+        var timer;
+
+        // Build dots
+        images.forEach(function (_, i) {
+          var dot = document.createElement("button");
+          dot.className = "carousel-dot" + (i === 0 ? " active" : "");
+          dot.setAttribute("aria-label", "Go to screenshot " + (i + 1));
+          dot.addEventListener("click", function () {
+            goTo(i);
+          });
+          dots.appendChild(dot);
+        });
+
+        function goTo(index) {
+          current = (index + images.length) % images.length;
+          img.src = images[current];
+          img.alt = "ROSDeck layout example " + (current + 1);
+          dots.querySelectorAll(".carousel-dot").forEach(function (d, i) {
+            d.classList.toggle("active", i === current);
+          });
+          resetTimer();
+        }
+
+        function resetTimer() {
+          clearInterval(timer);
+          timer = setInterval(function () {
+            goTo(current + 1);
+          }, 2000);
+        }
+
+        prev.addEventListener("click", function () {
+          goTo(current - 1);
+        });
+        next.addEventListener("click", function () {
+          goTo(current + 1);
+        });
+
+        resetTimer();
+      })();
+
+      document.querySelectorAll(".beta-form").forEach(function (form) {
+        var input = form.querySelector(".email-input");
+        var btn = form.querySelector(".email-submit");
+        var feedback = form.querySelector(".email-feedback");
+        var androidCheck = form.querySelector(".beta-android-check");
+
+        androidCheck.addEventListener("change", function () {
+          btn.disabled = !androidCheck.checked;
+        });
+
+        form.addEventListener("submit", function (e) {
+          e.preventDefault();
+          btn.disabled = true;
+          btn.textContent = "Sending…";
+          feedback.className = "email-feedback";
+          feedback.textContent = "";
+
+          fetch("https://formspree.io/f/mdawrynz", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+            body: JSON.stringify({ email: input.value }),
+          })
+            .then(function (res) {
+              return res.json().then(function (data) {
+                return { ok: res.ok, data: data };
+              });
+            })
+            .then(function (result) {
+              if (result.ok) {
+                form.innerHTML =
+                  "<p class=\"email-feedback success\">You're on the list. We'll reach out when a spot opens up.</p>";
+              } else {
+                feedback.className = "email-feedback error";
+                feedback.textContent =
+                  (result.data.errors || [])
+                    .map(function (err) {
+                      return err.message;
+                    })
+                    .join(", ") || "Something went wrong. Please try again.";
+                btn.disabled = false;
+                btn.textContent = "Join closed beta";
+              }
+            })
+            .catch(function () {
+              feedback.className = "email-feedback error";
+              feedback.textContent = "Network error. Please try again.";
+              btn.disabled = false;
+              btn.textContent = "Join closed beta";
+            });
+        });
+      });
+    </script>
+  </body>
+</html>
