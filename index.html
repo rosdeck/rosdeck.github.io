@@ -564,6 +564,117 @@
         object-fit: cover;
         background: #1a1a1a; /* shown if image missing */
       }
+
+      /* ── Mobile responsive ─────────────────────────────── */
+      @media (max-width: 768px) {
+        nav {
+          padding: 16px 20px;
+        }
+        .hero {
+          padding: 56px 20px 48px;
+        }
+        .section-wrap {
+          padding: 64px 20px;
+        }
+        .cta-section {
+          padding: 64px 20px;
+        }
+        .screenshots {
+          padding: 32px 20px 64px;
+        }
+        footer {
+          padding: 20px;
+          flex-direction: column;
+          gap: 12px;
+          text-align: center;
+        }
+        .footer-left {
+          flex-direction: column;
+          gap: 8px;
+        }
+
+        /* Phones row: hide side phones on mobile */
+        .phones-row {
+          gap: 12px;
+        }
+        .phone-wrap.side {
+          display: none;
+        }
+        .phone-wrap.main .phone-frame {
+          width: 260px;
+        }
+
+        /* Stack 2-col grids */
+        .layout-cols,
+        .connect-cols {
+          grid-template-columns: 1fr;
+          gap: 40px;
+        }
+
+        /* Carousel phone smaller */
+        .carousel-phone {
+          max-width: 260px;
+        }
+
+        /* Widgets: 1 column */
+        .widgets-grid {
+          grid-template-columns: 1fr;
+        }
+        .widget-cell {
+          border-right: none;
+          border-bottom: 1px solid #1e1e1e;
+        }
+        .widget-cell:last-child {
+          border-bottom: none;
+        }
+
+        /* Email row stacks */
+        .email-row {
+          flex-direction: column;
+        }
+        .email-submit {
+          width: 100%;
+        }
+      }
+
+      @media (min-width: 769px) and (max-width: 1024px) {
+        nav {
+          padding: 20px 32px;
+        }
+        .section-wrap {
+          padding: 80px 32px;
+        }
+        .cta-section {
+          padding: 80px 32px;
+        }
+        .screenshots {
+          padding: 40px 32px 80px;
+        }
+        footer {
+          padding: 24px 32px;
+        }
+        .phone-wrap.main .phone-frame {
+          width: 280px;
+        }
+        .phone-wrap.side .phone-frame {
+          width: 220px;
+        }
+        .widgets-grid {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .widget-cell:nth-child(3n) {
+          border-right: 1px solid #1e1e1e;
+        }
+        .widget-cell:nth-child(2n) {
+          border-right: none;
+        }
+        .widget-cell:nth-child(n + 4) {
+          border-bottom: 1px solid #1e1e1e;
+        }
+        .widget-cell:nth-child(n + 5) {
+          border-bottom: none;
+        }
+      }
     </style>
   </head>
   <body>
