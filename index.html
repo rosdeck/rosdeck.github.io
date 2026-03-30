@@ -44,6 +44,14 @@
         letter-spacing: 3px;
         text-transform: uppercase;
         color: #f0f0f0;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .wordmark-icon {
+        width: 28px;
+        height: 28px;
+        border-radius: 6px;
       }
       .wordmark span {
         color: #34d399;
@@ -679,13 +687,16 @@
   </head>
   <body>
     <nav>
-      <div class="wordmark">ROS<span>Deck</span></div>
-      <a href="./privacy-policy.html">Privacy Policy</a>
+      <div class="wordmark"><img src="./assets/icon.png" alt="ROSDeck icon" class="wordmark-icon" />ROS<span>Deck</span></div>
+      <div style="display:flex;align-items:center;gap:20px">
+        <a href="https://github.com/baunuri/rosdeck">GitHub</a>
+        <a href="./privacy-policy.html">Privacy</a>
+      </div>
     </nav>
     <main>
       <section class="hero">
         <div class="badge">ROS 2</div>
-        <h1>ROSDeck</h1>
+        <h1>ROSdeck</h1>
         <p class="hero-tagline">ROS 2 teleop, done right.</p>
         <p class="hero-desc">
           Monitor sensors, stream camera feeds, and drive your robot — all from
@@ -702,9 +713,7 @@
               placeholder="your@email.com"
               required
             />
-            <button type="submit" class="email-submit">
-              Join closed beta
-            </button>
+            <button type="submit" class="email-submit">Join closed beta</button>
           </div>
           <p class="email-feedback"></p>
         </form>
@@ -947,9 +956,7 @@
               placeholder="your@email.com"
               required
             />
-            <button type="submit" class="email-submit">
-              Join closed beta
-            </button>
+            <button type="submit" class="email-submit">Join closed beta</button>
           </div>
           <p class="email-feedback"></p>
         </form>
@@ -960,7 +967,10 @@
         <span class="footer-wordmark">ROSDeck</span>
         <span class="footer-copy">© 2026 Baunuri</span>
       </div>
-      <a href="./privacy-policy.html">Privacy Policy</a>
+      <div style="display:flex;align-items:center;gap:20px">
+        <a href="https://github.com/baunuri/rosdeck">GitHub</a>
+        <a href="./privacy-policy.html">Privacy</a>
+      </div>
     </footer>
     <script>
       (function () {
