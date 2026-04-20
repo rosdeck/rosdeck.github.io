@@ -703,21 +703,7 @@
           Monitor sensors, stream camera feeds, and drive your robot — all from
           your phone. No cloud. No account. Just connect.
         </p>
-        <!-- Replace action URL with your Mailchimp list signup endpoint -->
-        <form class="beta-form email-capture">
-          <p class="email-capture-label">Android — closed beta</p>
-          <div class="email-row">
-            <input
-              type="email"
-              name="email"
-              class="email-input"
-              placeholder="your@email.com"
-              required
-            />
-            <button type="submit" class="email-submit">Join closed beta</button>
-          </div>
-          <p class="email-feedback"></p>
-        </form>
+        <a href="https://play.google.com/store/apps/details?id=com.rammi.ros2mobile" class="email-submit" style="text-decoration:none;display:inline-block;margin-top:8px;padding:15px 32px;font-size:15px;">Get it on Google Play</a>
       </section>
       <div class="screenshots">
         <div class="phones-row">
@@ -947,20 +933,8 @@
 
       <div class="cta-section">
         <h2>Try it on your robot.</h2>
-        <p>Android — closed beta</p>
-        <form class="beta-form email-capture">
-          <div class="email-row">
-            <input
-              type="email"
-              name="email"
-              class="email-input"
-              placeholder="your@email.com"
-              required
-            />
-            <button type="submit" class="email-submit">Join closed beta</button>
-          </div>
-          <p class="email-feedback"></p>
-        </form>
+        <p>Available now on Android</p>
+        <a href="https://play.google.com/store/apps/details?id=com.rammi.ros2mobile" class="email-submit" style="text-decoration:none;display:inline-block;margin-top:8px;padding:15px 32px;font-size:15px;">Get it on Google Play</a>
       </div>
     </main>
     <footer>
@@ -1032,55 +1006,7 @@
         resetTimer();
       })();
 
-      document.querySelectorAll(".beta-form").forEach(function (form) {
-        var input = form.querySelector(".email-input");
-        var btn = form.querySelector(".email-submit");
-        var feedback = form.querySelector(".email-feedback");
 
-        form.addEventListener("submit", function (e) {
-          e.preventDefault();
-          btn.disabled = true;
-          btn.textContent = "Sending…";
-          feedback.className = "email-feedback";
-          feedback.textContent = "";
-
-          fetch("https://formspree.io/f/mdawrynz", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-              Accept: "application/json",
-            },
-            body: JSON.stringify({ email: input.value }),
-          })
-            .then(function (res) {
-              return res.json().then(function (data) {
-                return { ok: res.ok, data: data };
-              });
-            })
-            .then(function (result) {
-              if (result.ok) {
-                form.innerHTML =
-                  "<p class=\"email-feedback success\">You're on the list. We'll reach out when a spot opens up.</p>";
-              } else {
-                feedback.className = "email-feedback error";
-                feedback.textContent =
-                  (result.data.errors || [])
-                    .map(function (err) {
-                      return err.message;
-                    })
-                    .join(", ") || "Something went wrong. Please try again.";
-                btn.disabled = false;
-                btn.textContent = "Join closed beta";
-              }
-            })
-            .catch(function () {
-              feedback.className = "email-feedback error";
-              feedback.textContent = "Network error. Please try again.";
-              btn.disabled = false;
-              btn.textContent = "Join closed beta";
-            });
-        });
-      });
     </script>
   <script data-goatcounter="https://baunuri.goatcounter.com/count"
           async src="//gc.zgo.at/count.js"></script>
